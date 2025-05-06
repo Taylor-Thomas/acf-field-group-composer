@@ -113,6 +113,7 @@ class ResolveConfigForLayoutTest extends TestCase
                     'name' => 'someRepeater',
                     'label' => 'Some Repeater',
                     'type' => 'repeater',
+                    'collapsedName' => 'someNestedImage',
                     'sub_fields' => [
                         [
                             'name' => 'someNestedImage',
@@ -144,9 +145,11 @@ class ResolveConfigForLayoutTest extends TestCase
         $layout['name'] = 'prefix_layout';
         $layout['sub_fields'][0]['key'] = 'field_prefix_layout_someBoolean';
         $layout['sub_fields'][1]['key'] = 'field_prefix_layout_someRepeater';
+        $layout['sub_fields'][1]['collapsed'] = 'field_prefix_layout_someRepeater_someNestedImage';
         $layout['sub_fields'][1]['sub_fields'][0]['key'] = 'field_prefix_layout_someRepeater_someNestedImage';
         $layout['sub_fields'][1]['sub_fields'][0]['conditional_logic'][0][0]['field'] = 'field_prefix_layout_someBoolean';
         unset($layout['sub_fields'][1]['sub_fields'][0]['conditional_logic'][0][0]['fieldPath']);
+        unset($layout['sub_fields'][1]['collapsedName']);
         $this->assertEquals($layout, $output);
     }
 }

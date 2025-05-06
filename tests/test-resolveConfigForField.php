@@ -451,6 +451,26 @@ class ResolveConfigForFieldTest extends TestCase
         $this->assertEquals($config, $output);
     }
 
+    public function testBuildCollapsed()
+    {
+        $subFieldConfig = [
+            'name' => 'subField',
+            'label' => 'Sub Field',
+            'type' => 'someType'
+        ];
+        $config = [
+            'name' => 'repeaterField',
+            'label' => 'repeater Field',
+            'type' => 'repeater',
+            'collapsedName' => 'subField',
+            'sub_fields' => [$subFieldConfig]
+        ];
+        $output = ResolveConfig::forField($config);
+        $subFieldConfig['key'] = 'field_repeaterField_subField';
+        $this->assertEquals('field_repeaterField_subField', $output['collapsed']);
+        $this->assertArrayNotHasKey('collapsedName', $output);
+    }
+
     public function testResolveMultipleFieldsFromFilter()
     {
         $filter = 'ACFComposer/Fields/subField';

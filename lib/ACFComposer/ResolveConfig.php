@@ -118,6 +118,8 @@ class ResolveConfig
         $keySuffix = implode('_', $parentKeys);
         $output['key'] = "field_{$keySuffix}";
 
+        $output = self::forCollapsed($output, $keySuffix);
+
         $output = apply_filters('ACFComposer/resolveEntity', $output);
         $output = apply_filters("ACFComposer/resolveEntity?name={$output['name']}", $output);
         $output = apply_filters("ACFComposer/resolveEntity?key={$output['key']}", $output);
@@ -231,6 +233,27 @@ class ResolveConfig
                     return $condition;
                 }, $conditionGroup);
             }, $config['conditional_logic']);
+        }
+        return $config;
+    }
+
+    /**
+     * Builds and sets the collapsed attribute from the specified collapsedName and ancestors.
+     *
+     * @param array $config Configuration array for the field.
+     * @param array $key Imploded ancestor keys and field key.
+     *
+     * @return array Configuration array with built collapsed attribute.
+     */
+    protected static function forCollapsed($config, $key)
+    {
+        if (isset($config['type'])
+            && $config['type'] === 'repeater'
+            && isset($config['collapsedName'])
+            && isset($config['sub_fields'])
+        ) {
+            $config['collapsed'] = "field_{$key}_{$config['collapsedName']}";
+            unset($config['collapsedName']);
         }
         return $config;
     }
